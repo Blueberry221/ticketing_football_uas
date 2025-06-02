@@ -9,7 +9,6 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TicketsController;
 
 
-// Rute Halaman Utama
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
