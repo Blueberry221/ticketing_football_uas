@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
+            $table->enum('placement',['timur', 'tenggara', 'selatan', 'barat'])->nullable(false);
+            $table->enum('status',['VIP','Regular'])->nullable(false);
+            $table->decimal('price',10,2)->nullable(false);
             $table->timestamps();
         });
     }
