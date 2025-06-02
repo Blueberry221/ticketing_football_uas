@@ -10,8 +10,13 @@ class Areas extends Model
     use HasFactory;
 
     protected $fillable = [
-        'placement',
-        'status',
+        'placement', 
+        'status', 
         'price'
     ];
+
+    public function seats()
+    {
+        return $this->hasMany(Seats::class);
+    }
 }

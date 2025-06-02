@@ -23,6 +23,11 @@ class Tickets extends Model
         return $this->belongsTo(Matches::class);
     }
 
+    public function seat()
+    {
+        return $this->belongsTo(Seats::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(Users::class);

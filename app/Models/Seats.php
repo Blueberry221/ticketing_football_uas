@@ -9,8 +9,20 @@ class Seats extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id'; 
+
     protected $fillable = [
-        'area_id',
-        'status',
+        'area_id', 
+        'status'
     ];
+
+    public function area()
+    {
+        return $this->belongsTo(Areas::class);
+    }
+
+    public function ticket()
+    {
+        return $this->hasOne(Tickets::class);
+    }
 }

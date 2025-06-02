@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
-            $table->integer('area_id');
+            $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->enum('status',['available','booked','maintenance'])->default('available');
             $table->timestamps();
 
-            $table->foreignId('area_id')->references('id')->on('areas');
         });
     }
 

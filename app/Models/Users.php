@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Users extends Model
 {
-    use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
 
     protected $table = 'users';
 
@@ -18,8 +18,13 @@ class Users extends Model
         'password',
     ];
 
-    public $timestamps = false; 
+    public $timestamps = false;
     protected $hidden = [
         'password',
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Tickets::class);
+    }
 }
