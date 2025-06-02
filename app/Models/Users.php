@@ -11,6 +11,7 @@ class Users extends Model
     use HasFactory, Notifiable;
 
     protected $table = 'users';
+    public $timestamps = false;
 
     protected $fillable = [
         'name',
@@ -19,7 +20,6 @@ class Users extends Model
         'role'
     ];
 
-    public $timestamps = false;
     protected $hidden = [
         'password',
     ];
