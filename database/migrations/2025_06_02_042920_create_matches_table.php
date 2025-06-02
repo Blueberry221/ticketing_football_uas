@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('home_team_id')->constrained('teams')->onDelete('cascade');
+            $table->foreignId('away_team_id')->constrained('teams')->onDelete('cascade');
+            $table->dateTime('match_date');
+            $table->enum('status',['upcoming','ongoing','completed'])->nullable(false);
             $table->timestamps();
         });
     }
