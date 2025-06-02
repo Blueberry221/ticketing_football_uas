@@ -14,20 +14,20 @@ class TeamsTableSeeder extends Seeder
     public function run(): void
     {
         Teams::create([
-            'name' => 'Jakarta Tigers',
-            'logo' => 'jakarta_tigers.png',
+            'name' => 'Kumpulan Pria Menawan FC',
+            'logo' => 'KPM_FC.png',
             'city' => 'Jakarta',
         ]);
 
         Teams::create([
-            'name' => 'Bandung Wolves',
-            'logo' => 'bandung_wolves.png',
-            'city' => 'Bandung',
+            'name' => 'Paingan FC',
+            'logo' => 'Paingan_FC.png',
+            'city' => 'Sleman',
         ]);
 
         Teams::create([
-            'name' => 'Surabaya Sharks',
-            'logo' => 'surabaya_sharks.png',
+            'name' => 'Sore FC',
+            'logo' => 'Sore_FC.png',
             'city' => 'Surabaya',
         ]);
     }
