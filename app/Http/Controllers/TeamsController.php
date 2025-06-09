@@ -2,59 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teams;
 use Illuminate\Http\Request;
 
 class TeamsController extends Controller
 {
     public function index()
     {
-        $teams = Teams::all();
-        return view('teams.index', compact('teams'));
+        // Logika untuk menampilkan daftar teams
+        return view('teams.index');
     }
 
     public function create()
     {
+        // Logika untuk menampilkan form create team
         return view('teams.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-        ]);
-
-        Teams::create($validated);
-        return redirect()->route('teams.index')->with('success', 'Team created successfully.');
+        // Logika untuk menyimpan data team baru
+        return redirect()->route('teams.index');
     }
 
-    public function show(Teams $team)
+    public function show($id)
     {
-        return view('teams.show', compact('team'));
+        // Logika untuk menampilkan detail team
+        return view('teams.show');
     }
 
-    public function edit(Teams $team)
+    public function edit($id)
     {
-        return view('teams.edit', compact('team'));
+        // Logika untuk menampilkan form edit team
+        return view('teams.edit');
     }
 
-    public function update(Request $request, Teams $team)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-        ]);
-
-        $team->update($validated);
-        return redirect()->route('teams.index')->with('success', 'Team updated successfully.');
+        // Logika untuk mengupdate data team
+        return redirect()->route('teams.show', $id);
     }
 
-    public function destroy(Teams $team)
+    public function destroy($id)
     {
-        $team->delete();
-        return redirect()->route('teams.index')->with('success', 'Team deleted successfully.');
+        // Logika untuk menghapus team
+        return redirect()->route('teams.index');
     }
 }

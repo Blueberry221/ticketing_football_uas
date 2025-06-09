@@ -2,57 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Seats;
 use Illuminate\Http\Request;
 
 class SeatsController extends Controller
 {
     public function index()
     {
-        $seats = Seats::all();
-        return view('seats.index', compact('seats'));
+        // Logika untuk menampilkan daftar seats
+        return view('seats.index');
     }
 
     public function create()
     {
+        // Logika untuk menampilkan form create seat
         return view('seats.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'area_id' => 'required|exists:areas,id',
-            'status' => 'required|string|max:255',
-        ]);
-
-        Seats::create($validated);
-        return redirect()->route('seats.index')->with('success', 'Seat created successfully.');
+        // Logika untuk menyimpan data seat baru
+        return redirect()->route('seats.index');
     }
 
-    public function show(Seats $seat)
+    public function show($id)
     {
-        return view('seats.show', compact('seat'));
+        // Logika untuk menampilkan detail seat
+        return view('seats.show');
     }
 
-    public function edit(Seats $seat)
+    public function edit($id)
     {
-        return view('seats.edit', compact('seat'));
+        // Logika untuk menampilkan form edit seat
+        return view('seats.edit');
     }
 
-    public function update(Request $request, Seats $seat)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'area_id' => 'required|exists:areas,id',
-            'status' => 'required|string|max:255',
-        ]);
-
-        $seat->update($validated);
-        return redirect()->route('seats.index')->with('success', 'Seat updated successfully.');
+        // Logika untuk mengupdate data seat
+        return redirect()->route('seats.show', $id);
     }
 
-    public function destroy(Seats $seat)
+    public function destroy($id)
     {
-        $seat->delete();
-        return redirect()->route('seats.index')->with('success', 'Seat deleted successfully.');
+        // Logika untuk menghapus seat
+        return redirect()->route('seats.index');
     }
 }

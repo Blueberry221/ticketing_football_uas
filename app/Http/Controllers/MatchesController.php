@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Matches;
 use Illuminate\Http\Request;
+use App\Models\Matches;
 
 class MatchesController extends Controller
 {
@@ -15,48 +15,37 @@ class MatchesController extends Controller
 
     public function create()
     {
+        // Logika untuk menampilkan form create match
         return view('matches.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'home_team_id' => 'required|exists:teams,id',
-            'away_team_id' => 'required|exists:teams,id',
-            'match_date' => 'required|date',
-            'status' => 'required|string|max:255',
-        ]);
-
-        Matches::create($validated);
-        return redirect()->route('matches.index')->with('success', 'Match created successfully.');
+        // Logika untuk menyimpan data match baru
+        return redirect()->route('matches.index');
     }
 
-    public function show(Matches $match)
+    public function show($id)
     {
+        $match = Matches::findOrFail($id);
         return view('matches.show', compact('match'));
     }
 
-    public function edit(Matches $match)
+    public function edit($id)
     {
-        return view('matches.edit', compact('match'));
+        // Logika untuk menampilkan form edit match
+        return view('matches.edit');
     }
 
-    public function update(Request $request, Matches $match)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'home_team_id' => 'required|exists:teams,id',
-            'away_team_id' => 'required|exists:teams,id',
-            'match_date' => 'required|date',
-            'status' => 'required|string|max:255',
-        ]);
-
-        $match->update($validated);
-        return redirect()->route('matches.index')->with('success', 'Match updated successfully.');
+        // Logika untuk mengupdate data match
+        return redirect()->route('matches.show', $id);
     }
 
-    public function destroy(Matches $match)
+    public function destroy($id)
     {
-        $match->delete();
-        return redirect()->route('matches.index')->with('success', 'Match deleted successfully.');
+        // Logika untuk menghapus match
+        return redirect()->route('matches.index');
     }
 }

@@ -2,59 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Areas;
 use Illuminate\Http\Request;
 
 class AreasController extends Controller
 {
     public function index()
     {
-        $areas = Areas::all();
-        return view('areas.index', compact('areas'));
+        // Logika untuk menampilkan daftar areas
+        return view('areas.index');
     }
 
     public function create()
     {
+        // Logika untuk menampilkan form create area
         return view('areas.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'placement' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'price' => 'required|numeric',
-        ]);
-
-        Areas::create($validated);
-        return redirect()->route('areas.index')->with('success', 'Area created successfully.');
+        // Logika untuk menyimpan data area baru
+        return redirect()->route('areas.index');
     }
 
-    public function show(Areas $area)
+    public function show($id)
     {
-        return view('areas.show', compact('area'));
+        // Logika untuk menampilkan detail area
+        return view('areas.show');
     }
 
-    public function edit(Areas $area)
+    public function edit($id)
     {
-        return view('areas.edit', compact('area'));
+        // Logika untuk menampilkan form edit area
+        return view('areas.edit');
     }
 
-    public function update(Request $request, Areas $area)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'placement' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'price' => 'required|numeric',
-        ]);
-
-        $area->update($validated);
-        return redirect()->route('areas.index')->with('success', 'Area updated successfully.');
+        // Logika untuk mengupdate data area
+        return redirect()->route('areas.show', $id);
     }
 
-    public function destroy(Areas $area)
+    public function destroy($id)
     {
-        $area->delete();
-        return redirect()->route('areas.index')->with('success', 'Area deleted successfully.');
+        // Logika untuk menghapus area
+        return redirect()->route('areas.index');
     }
 }

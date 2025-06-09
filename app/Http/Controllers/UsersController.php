@@ -2,71 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
     public function index()
     {
-        $users = Users::all();
-        return view('users.index', compact('users'));
+        // Logika untuk menampilkan daftar users
+        return view('users.index');
     }
 
     public function create()
     {
+        // Logika untuk menampilkan form create user
         return view('users.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string|max:255',
-        ]);
-
-        $validated['password'] = Hash::make($validated['password']);
-        Users::create($validated);
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        // Logika untuk menyimpan data user baru
+        return redirect()->route('users.index');
     }
 
-    public function show(Users $user)
+    public function show($id)
     {
-        return view('users.show', compact('user'));
+        // Logika untuk menampilkan detail user
+        return view('users.show');
     }
 
-    public function edit(Users $user)
+    public function edit($id)
     {
-        return view('users.edit', compact('user'));
+        // Logika untuk menampilkan form edit user
+        return view('users.edit');
     }
 
-    public function update(Request $request, Users $user)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
-            'role' => 'required|string|max:255',
-        ]);
-
-        if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
-        }
-
-        $user->update($validated);
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        // Logika untuk mengupdate data user
+        return redirect()->route('users.show', $id);
     }
 
-
-
-    public function destroy(Users $user)
+    public function destroy($id)
     {
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        // Logika untuk menghapus user
+        return redirect()->route('users.index');
     }
 }
