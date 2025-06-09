@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .btn-register {
             background-color: #ffff99;
-            color: #2f4f2f;
+            color: #052000;
             border: none;
             padding: 8px 16px;
             margin-top: 10px;

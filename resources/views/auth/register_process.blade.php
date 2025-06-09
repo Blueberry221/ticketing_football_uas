@@ -1,45 +1,33 @@
 <?php
+session_start();
 
-use Illuminate\Support\Facades\Route;
+// Simulasi rute sederhana
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
-
-Route::get('/profile', function () {
-    return view('profile');
-})->middleware('auth')->name('profile');
-
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
-
-Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'registerProcess'])->name('register.process');
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.process');
-
-Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-
-Route::get('/password/reset', function () {
-    return view('auth.forgot-password');
-})->name('password.request');
-
-Route::get('/password/reset/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->name('password.reset');
-
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/confirm-password', function () {
-    return view('auth.confirm-password');
-})->middleware('auth')->name('password.confirm');
+if ($uri === '/' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    include 'views/welcome.php';
+} elseif ($uri === '/dashboard' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_SESSION['user'])) {
+        include 'views/dashboard.php';
+    } else {
+        header('Location: /login');
+    }
+} elseif ($uri === '/login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    include 'views/login.php';
+} elseif ($uri === '/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Proses login (contoh sederhana)
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    if ($username === 'admin' && $password === 'password') {
+        $_SESSION['user'] = $username;
+        header('Location: /dashboard');
+    } else {
+        header('Location: /login?error=invalid');
+    }
+} elseif ($uri === '/logout' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+    session_destroy();
+    header('Location: /');
+} else {
+    http_response_code(404);
+    echo '404 Not Found';
+}
