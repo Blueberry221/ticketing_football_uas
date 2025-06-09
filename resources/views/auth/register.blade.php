@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <a href="login.php" class="underline text-sm text-yellow-200 hover:text-yellow-300">Already registered?</a>
+                <a href="login" class="underline text-sm text-yellow-200 hover:text-yellow-300">Already registered?</a>
                 <button type="submit" class="btn-register ms-4">Register</button>
             </div>
         </form>
