@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         UsersTableSeeder::class,
         TeamsTableSeeder::class,
         AreasTableSeeder::class,
+         MatchesTableSeeder::class,
         // Tambah lain jika ada
     ]);
     }
