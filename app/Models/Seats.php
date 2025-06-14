@@ -13,6 +13,7 @@ class Seats extends Model
 
     protected $fillable = [
         'area_id', 
+        'number',
         'status'
     ];
 

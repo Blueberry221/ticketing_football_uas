@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->enum('status',['available','booked','maintenance'])->default('available');
+            $table->string('number');
             $table->timestamps();
 
         });

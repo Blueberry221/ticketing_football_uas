@@ -22,10 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-        UsersTableSeeder::class,
-        TeamsTableSeeder::class,
-        AreasTableSeeder::class,
-        // Tambah lain jika ada
-    ]);
+            UsersTableSeeder::class,
+            TeamsTableSeeder::class,
+            AreasTableSeeder::class,
+            MatchesTableSeeder::class,
+            SeatsTableSeeder::class,
+            // Tambah lain jika ada
+        ]);
     }
 }
