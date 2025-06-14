@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('seat_id')->constrained('seats')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->enum('status',['available','booked','canceled'])->default('available');
+            $table->enum('status', ['pending', 'paid', 'unpaid', 'cancelled']);
             $table->dateTime('booked_at')->default(NULL);
             $table->string('payment_method',50);
             $table->timestamps();

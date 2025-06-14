@@ -10,6 +10,7 @@ class Tickets extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_id',
         'match_id',
         'seat_id',
         'status',

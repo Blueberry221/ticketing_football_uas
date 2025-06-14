@@ -3,8 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Matches;
+use App\Models\Seats;
+use App\Models\Tickets;
+use App\Models\Order;
+use App\Models\Users;
+use Midtrans\Snap;
+use Midtrans\Config;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    //
+    public function index()
+    {
+        $matches = Matches::with(['homeTeam', 'awayTeam'])->get();
+        $seats = Seats::with('area')->where('status', 'available')->get(); // hanya seat tersedia
+        return view('order.index', compact('matches', 'seats'));
+    }
+
+    public function order(Request $request)
+    {
+        $request->validate([
+            'match_id' => 'required|exists:matches,id',
+            'seat_id' => 'required|exists:seats,id',
+        ]);
+
+        $seat = Seats::with('area')->findOrFail($request->seat_id);
+        if ($seat->status !== 'available') {
+            return redirect()->back()->with('error', 'Seat sudah dipesan.');
+        }
+
+        $user = Auth::user() ?? Users::where('role', 'user')->first();
+
+        // 1. Buat Order
+        $order = Order::create([
+            'user_id' => $user->id,
+            'total_price' => $seat->area->price,
+            'status' => 'pending',
+            'payment_method' => 'midtrans',
+        ]);
+
+        // 2. Buat Tiket
+        $ticket = Tickets::create([
+            'order_id' => $order->id,
+            'match_id' => $request->match_id,
+            'seat_id' => $seat->id,
+            'status' => 'pending',
+            'user_id' => $user->id,
+            'booked_at' => now(),
+            'payment_method' => 'midtrans',
+        ]);
+
+        // Midtrans config
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = false;
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'ORDER-' . Str::uuid(),
+                'gross_amount' => $seat->area->price,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+            'item_details' => [
+                [
+                    'id' => $ticket->id,
+                    'price' => $seat->area->price,
+                    'quantity' => 1,
+                    'name' => 'Tiket pertandingan #' . $request->match_id,
+                ],
+            ],
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+
+        return view('order.checkout', compact('snapToken', 'ticket'));
+    }
 }

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('order_id')->unique(); // dari Midtrans
             $table->decimal('total_price', 10, 2); // total harga semua tiket
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('payment_method')->default('midtrans');

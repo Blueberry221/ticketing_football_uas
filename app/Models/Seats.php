@@ -19,7 +19,7 @@ class Seats extends Model
 
     public function area()
     {
-        return $this->belongsTo(Areas::class);
+        return $this->belongsTo(Areas::class, 'area_id');
     }
 
     public function ticket()
