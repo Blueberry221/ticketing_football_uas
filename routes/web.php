@@ -1,20 +1,20 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AreasController;
-use App\Http\Controllers\TeamsController;
-use App\Http\Controllers\SeatsController;
-use App\Http\Controllers\MatchesController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\TicketsController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
+});
 
-Route::resource('areas', AreasController::class);
-Route::resource('teams', TeamsController::class);
-Route::resource('seats', SeatsController::class);
-Route::resource('matches', MatchesController::class);
-Route::resource('users', UsersController::class);
-Route::resource('tickets', TicketsController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
