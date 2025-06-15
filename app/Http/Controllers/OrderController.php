@@ -67,7 +67,7 @@ class OrderController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => $orderNumber, 
+                'order_id' => $orderNumber,
                 'gross_amount' => $seat->area->price,
             ],
             'customer_details' => [
@@ -88,15 +88,28 @@ class OrderController extends Controller
 
         return view('order.checkout', compact('snapToken', 'ticket'));
     }
+
+    //Note : Untuk yg ngerjain view order/transaksi nanti, untuk bagian callback seharusnya udah bisa, kalau udah ditest pembayaran make midtrans tolong dicek db-nya ya
+    //Frathol Pro palhem
     public function callback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
         if ($hashed == $request->signature_key) {
-            if ($request->transaction_status == 'capture') {
-                $order = Order::find($request->order_id);
-                $order->update(['status' => 'paid']);
+            $order = Order::where('order_number', $request->order_id)->first();
+            if (!$order) {
+                return response()->json(['message' => 'Order not found'], 404);
             }
+            if (in_array($request->transaction_status, ['capture', 'settlement'])) {
+                $order->update(['status' => 'paid']);
+            } elseif (in_array($request->transaction_status, ['cancel', 'deny', 'expire'])) {
+                $order->update(['status' => 'failed']);
+            } elseif ($request->transaction_status === 'pending') {
+                $order->update(['status' => 'pending']);
+            }
+
+            return response()->json(['message' => 'Callback success']);
         }
+        return response()->json(['message' => 'Invalid signature'], 403);
     }
 }
