@@ -36,9 +36,13 @@ class OrderController extends Controller
 
         $user = Auth::user() ?? Users::where('role', 'user')->first();
 
+        // Generate order_number (order_id untuk midtrans)
+        $orderNumber = 'ORDER-' . Str::uuid();
+
         // 1. Buat Order
         $order = Order::create([
             'user_id' => $user->id,
+            'order_number' => $orderNumber, // <--- Tambah ini
             'total_price' => $seat->area->price,
             'status' => 'pending',
             'payment_method' => 'midtrans',
@@ -63,7 +67,7 @@ class OrderController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => 'ORDER-' . Str::uuid(),
+                'order_id' => $orderNumber, 
                 'gross_amount' => $seat->area->price,
             ],
             'customer_details' => [
@@ -83,5 +87,16 @@ class OrderController extends Controller
         $snapToken = Snap::getSnapToken($params);
 
         return view('order.checkout', compact('snapToken', 'ticket'));
+    }
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture') {
+                $order = Order::find($request->order_id);
+                $order->update(['status' => 'paid']);
+            }
+        }
     }
 }

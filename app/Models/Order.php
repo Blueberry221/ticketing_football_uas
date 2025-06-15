@@ -11,7 +11,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'order_id', // dari Midtrans
+        'order_number',
         'total_price',
         'status',
         'payment_method',

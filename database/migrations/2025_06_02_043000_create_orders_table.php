@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('total_price', 10, 2); // total harga semua tiket
+            $table->string('order_number');
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('payment_method')->default('midtrans');
             $table->timestamps();
