@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Users extends Model
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
     protected $table = 'users';
 
@@ -23,9 +22,4 @@ class Users extends Model
     protected $hidden = [
         'password',
     ];
-
-    public function tickets()
-    {
-        return $this->hasMany(Tickets::class);
-    }
 }
