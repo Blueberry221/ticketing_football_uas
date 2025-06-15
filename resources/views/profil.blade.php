@@ -1,53 +1,53 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiketing Football - Profile</title>
     <style>
         body {
-            background-color: #052000;
-            font-family: Arial, sans-serif;
-            color: #ffff99;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background: #052000;
+            color: #ffffff;
         }
 
-        nav {
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background-color: #052000;
+            background-color: #000000;
+            padding: 15px 30px;
         }
 
-        nav h2 {
+        .logo {
             font-size: 24px;
             font-weight: bold;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        nav ul li {
-            display: inline;
-        }
-
-        nav ul li a {
             color: #ffff99;
+        }
+
+        .menu a {
+            color: #ffff99;
+            margin-left: 20px;
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 20px;
-            border: 1px solid transparent;
         }
 
-        nav ul li a.active {
+        .menu a:hover,
+        .menu a.active {
             border: 1px solid #ffff99;
+            background-color: #002400;
+            color: #ffff99;
         }
 
-        .container {
+        .content {
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -104,20 +104,20 @@
         }
     </style>
 </head>
+
 <body>
+    <div class="navbar">
+        <div class="logo">Tiketing_Football</div>
+        <div class="menu">
+            <a href="dashboard">Home</a>
+            <a href="cart.php">Cart</a>
+            <a href="schedule.php">Schedule</a>
+            <a href="tickets.php">Tickets</a>
+            <a href="profile" class="active">Profile</a>
+        </div>
+    </div>
 
-    <nav>
-        <h2>Tiketing_Football</h2>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Cart</a></li>
-            <li><a href="#">Schedule</a></li>
-            <li><a href="#">Tickets</a></li>
-            <li><a href="#" class="active">Profile</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
+    <div class="content">
         <img src="https://i.imgur.com/4M34hi2.png" alt="Profile Picture" class="profile-picture">
         <div class="change-picture">Change Picture</div>
 
@@ -138,6 +138,6 @@
 
         <button class="update-button">Update</button>
     </div>
-
 </body>
+
 </html>
