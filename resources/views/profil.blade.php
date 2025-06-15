@@ -1,4 +1,4 @@
-<?php
+tolong ubah desainnya seperti code ini <?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -66,10 +66,20 @@ session_start();
             margin-top: 10px;
             font-size: 14px;
             color: #ffff99;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: #ffff99;
+            width: 300px;
+            text-align: left;
         }
 
         .form-group {
-            margin-top: 20px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             width: 300px;
@@ -87,7 +97,8 @@ session_start();
             color: #ffff99;
         }
 
-        .update-button {
+        .update-button,
+        .delete-button {
             margin-top: 30px;
             padding: 10px;
             width: 300px;
@@ -101,6 +112,15 @@ session_start();
 
         .update-button:hover {
             background-color: #013b01;
+        }
+
+        .delete-button {
+            background-color: #4b0000;
+            border: 1px solid #ff9999;
+        }
+
+        .delete-button:hover {
+            background-color: #6b0000;
         }
     </style>
 </head>
@@ -121,23 +141,42 @@ session_start();
         <img src="https://i.imgur.com/4M34hi2.png" alt="Profile Picture" class="profile-picture">
         <div class="change-picture">Change Picture</div>
 
+        <!-- Profile Information Section -->
+        <div class="section-title">Profile Information</div>
         <div class="form-group">
             <label>Username</label>
             <input type="text" value="bani jameszs">
         </div>
-
         <div class="form-group">
             <label>Email</label>
             <input type="email" value="Tonimas@gmail.com">
         </div>
+        <button class="update-button">Update Profile</button>
 
+        <!-- Update Password Section -->
+        <div class="section-title">Update Password</div>
         <div class="form-group">
-            <label>Password</label>
-            <input type="password" value="12345678">
+            <label>Current Password</label>
+            <input type="password" placeholder="Enter current password">
         </div>
+        <div class="form-group">
+            <label>New Password</label>
+            <input type="password" placeholder="Enter new password">
+        </div>
+        <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" placeholder="Confirm new password">
+        </div>
+        <button class="update-button">Update Password</button>
 
-        <button class="update-button">Update</button>
+        <!-- Delete Account Section -->
+        <div class="section-title">Delete Account</div>
+        <div class="form-group">
+            <p style="color: #ff9999; font-size: 14px;">
+                Once your account is deleted, all of its resources and data will be permanently removed. Please confirm to delete your account.
+            </p>
+        </div>
+        <button class="delete-button">Delete Account</button>
     </div>
 </body>
-
 </html>
