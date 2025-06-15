@@ -10,6 +10,7 @@ class Tickets extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_id',
         'match_id',
         'seat_id',
         'status',
@@ -31,5 +32,9 @@ class Tickets extends Model
     public function user()
     {
         return $this->belongsTo(Users::class);
+    }
+
+    public function order(){
+        return $this->belongsTo(Order::class);
     }
 }
