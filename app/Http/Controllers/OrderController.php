@@ -95,21 +95,47 @@ class OrderController extends Controller
     {
         $serverKey = config('midtrans.server_key');
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
-        if ($hashed == $request->signature_key) {
+
+        if ($hashed === $request->signature_key) {
             $order = Order::where('order_number', $request->order_id)->first();
+
             if (!$order) {
                 return response()->json(['message' => 'Order not found'], 404);
             }
-            if (in_array($request->transaction_status, ['capture', 'settlement'])) {
+
+            $transaction = $request->transaction_status;
+
+            if (in_array($transaction, ['capture', 'settlement'])) {
                 $order->update(['status' => 'paid']);
-            } elseif (in_array($request->transaction_status, ['cancel', 'deny', 'expire'])) {
+
+                $tickets = Tickets::where('order_id', $order->id)->get();
+                foreach ($tickets as $ticket) {
+                    $ticket->update(['status' => 'paid']);
+                    $ticket->seat->update(['status' => 'booked']);
+                }
+            } elseif (in_array($transaction, ['cancel', 'deny', 'expire'])) {
                 $order->update(['status' => 'failed']);
-            } elseif ($request->transaction_status === 'pending') {
+
+                $tickets = Tickets::where('order_id', $order->id)->get();
+                foreach ($tickets as $ticket) {
+                    $ticket->update(['status' => 'cancelled']);
+                    $ticket->seat->update(['status' => 'available']);
+                }
+            } elseif ($transaction === 'pending') {
                 $order->update(['status' => 'pending']);
+
+                $tickets = Tickets::where('order_id', $order->id)->get();
+                foreach ($tickets as $ticket) {
+                    $ticket->update(['status' => 'pending']);
+                    if ($ticket->seat) {
+                        $ticket->seat->update(['status' => 'booked']);
+                    } // sementara dianggap dibooking
+                }
             }
 
             return response()->json(['message' => 'Callback success']);
         }
+
         return response()->json(['message' => 'Invalid signature'], 403);
     }
 }

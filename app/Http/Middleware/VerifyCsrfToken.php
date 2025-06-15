@@ -9,6 +9,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         // '/midtrans-callback' untuk disable CSRF, harusnya bisa kalau routenya web.php
         //DIUnkomen aja kalau misal pas selesai pembelian malah ga berubah status pembeliannya
-        // '/midtrans-callback',
+        '/midtrans-callback',
     ];
 }
