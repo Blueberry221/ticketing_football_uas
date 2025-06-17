@@ -7,7 +7,7 @@
     <title>Football Ticketing - Register</title>
     <style>
         body {
-            background-color: #052000;
+            background-color: #001b36;
             color: #ffff99;
             font-family: Arial, sans-serif;
             margin: 0;
