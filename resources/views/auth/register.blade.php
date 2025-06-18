@@ -46,7 +46,7 @@
 
         .btn-register {
             background-color: #ffff99;
-            color: #052000;
+            color: #001b36;
             border: none;
             padding: 0.5rem 1rem;
             margin-top: 1.5rem;

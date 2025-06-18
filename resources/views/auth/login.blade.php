@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #052000;
+            background-color: #001b36;
             color: #ffff99;
             font-family: Arial, sans-serif;
         }
@@ -22,7 +22,7 @@
         }
         .btn-login {
             background-color: #ffff99;
-            color: #052000;
+            color: #001b36;
             border: none;
             padding: 10px 20px;
             margin-top: 10px;
