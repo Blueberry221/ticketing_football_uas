@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tickets;
 use Illuminate\Http\Request;
 
-class TicketsController extends Controller
+class TicketController extends Controller
 {
     public function index()
     {

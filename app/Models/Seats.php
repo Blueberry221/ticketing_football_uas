@@ -9,10 +9,10 @@ class Seats extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id'; 
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'area_id', 
+        'area_id',
         'number',
         'status'
     ];
