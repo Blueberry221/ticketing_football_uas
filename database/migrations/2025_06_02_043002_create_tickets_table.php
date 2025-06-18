@@ -14,10 +14,9 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
             $table->foreignId('match_id')->constrained('matches')->onDelete('cascade');
             $table->foreignId('seat_id')->constrained('seats')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('user')->onDelete('set null');
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->enum('status', ['pending', 'paid', 'unpaid', 'cancelled']);
             $table->dateTime('booked_at')->default(NULL);

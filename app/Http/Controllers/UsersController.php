@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,7 +10,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = Users::all();
+        $users = User::all();
         return view('users.index', compact('users'));
     }
 
@@ -29,21 +29,21 @@ class UsersController extends Controller
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        Users::create($validated);
+        User::create($validated);
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    public function show(Users $user)
+    public function show(User $user)
     {
         return view('users.show', compact('user'));
     }
 
-    public function edit(Users $user)
+    public function edit(User $user)
     {
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request, Users $user)
+    public function update(Request $request, User $user)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -64,7 +64,7 @@ class UsersController extends Controller
 
 
 
-    public function destroy(Users $user)
+    public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
