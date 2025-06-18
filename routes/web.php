@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tickets', function () {
         return view('tickets');
     })->name('tickets');
-
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
     Route::get('/ticket', [TicketController::class, 'index'])->name('ticket');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
