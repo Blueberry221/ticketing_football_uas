@@ -37,8 +37,7 @@
             }
 
             .highlight-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transform: scale(1.02);
             }
 
             .arrow {
@@ -47,6 +46,13 @@
 
             .arrow:hover {
                 color: #facc15;
+            }
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
         </style>
     </head>
@@ -65,36 +71,50 @@
             </div>
         </div>
 
-        <!-- Highlight Section -->
         <div class="bg-gray-900 py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl font-bold text-yellow-400 mb-6">HIGHLIGHT</h2>
-                <div class="flex items-center justify-between overflow-x-auto space-x-4 py-4">
-                    <div class="arrow text-4xl text-yellow-400 cursor-pointer select-none">&lt;</div>
-                    <div class="flex space-x-4">
-                        <div class="highlight-card bg-white rounded-lg p-4 max-w-xs shadow-md">
-                            <img src="https://via.placeholder.com/250x150" alt="Transfer News"
-                                class="w-full rounded-md" />
-                            <p class="mt-3 text-sm"><strong>Bryan Mbeumo</strong> wants to join Manchester United as
-                                Ineos prepare talks to sign Brentford star</p>
-                        </div>
-                        <div class="highlight-card bg-white rounded-lg p-4 max-w-xs shadow-md">
-                            <img src="https://via.placeholder.com/250x150" alt="Inzaghi News"
-                                class="w-full rounded-md" />
-                            <p class="mt-3 text-sm">Not everyone at <strong>Inter</strong> wants Inzaghi to resist
-                                Al-Hilal offer</p>
-                        </div>
-                        <div class="highlight-card bg-white rounded-lg p-4 max-w-xs shadow-md">
-                            <img src="https://via.placeholder.com/250x150" alt="Preseason News"
-                                class="w-full rounded-md" />
-                            <p class="mt-3 text-sm"><strong>Premier League</strong> pre-season friendlies 2025/26:
-                                Fixtures, results, UK kick-off times</p>
+                <div class="flex items-center space-x-4">
+                    <!-- Tombol kiri -->
+                    <button id="prevBtn" class="arrow text-4xl text-yellow-400 cursor-pointer select-none">&lt;</button>
+
+                    <!-- Container scroll -->
+                    <div class="overflow-hidden w-full">
+                        <div id="carousel" class="flex space-x-4 overflow-x-auto scroll-smooth no-scrollbar">
+                            <!-- Card 1 -->
+                            <div class="highlight-card bg-white rounded-lg p-4 min-w-[300px] max-w-xs shadow-md flex-shrink-0">
+                                <img src="https://via.placeholder.com/250x150" class="w-full rounded-md" />
+                                <p class="mt-3 text-sm"><strong>Bryan Mbeumo</strong> wants to join Manchester United...</p>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="highlight-card bg-white rounded-lg p-4 min-w-[300px] max-w-xs shadow-md flex-shrink-0">
+                                <img src="https://via.placeholder.com/250x150" class="w-full rounded-md" />
+                                <p class="mt-3 text-sm">Not everyone at <strong>Inter</strong> wants Inzaghi to resist...</p>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="highlight-card bg-white rounded-lg p-4 min-w-[300px] max-w-xs shadow-md flex-shrink-0">
+                                <img src="https://via.placeholder.com/250x150" class="w-full rounded-md" />
+                                <p class="mt-3 text-sm"><strong>Premier League</strong> pre-season friendlies 2025/26...</p>
+                            </div>
+                            <!-- Tambahan Card 4 dan 5 -->
+                            <div class="highlight-card bg-white rounded-lg p-4 min-w-[300px] max-w-xs shadow-md flex-shrink-0">
+                                <img src="https://via.placeholder.com/250x150" class="w-full rounded-md" />
+                                <p class="mt-3 text-sm"><strong>Jude Bellingham</strong> voted UCL Player of the Season</p>
+                            </div>
+                            <div class="highlight-card bg-white rounded-lg p-4 min-w-[300px] max-w-xs shadow-md flex-shrink-0">
+                                <img src="https://via.placeholder.com/250x150" class="w-full rounded-md" />
+                                <p class="mt-3 text-sm"><strong>Messi</strong> confirms Copa América will be his last</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="arrow text-4xl text-yellow-400 cursor-pointer select-none">&gt;</div>
+
+                    <!-- Tombol kanan -->
+                    <button id="nextBtn" class="arrow text-4xl text-yellow-400 cursor-pointer select-none">&gt;</button>
                 </div>
             </div>
         </div>
+
+
 
         <!-- Footer -->
         <footer class="bg-gray-800 text-white py-2">
@@ -106,6 +126,20 @@
                 </div>
             </div>
         </footer>
+        <script>
+            const carousel = document.getElementById('carousel');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const cardWidth = 270; // px, termasuk margin
+
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            });
+        </script>
     </body>
 
     </html>
