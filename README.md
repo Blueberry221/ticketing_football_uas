@@ -1,61 +1,223 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎫 Ticketing Football UAS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
+  Aplikasi pemesanan tiket pertandingan sepak bola berbasis Laravel, lengkap dengan integrasi payment gateway Midtrans.  
+  <br />
+  <a href="https://github.com/username/ticketing_football_uas"><strong>Explore the Docs »</strong></a>
+  <br />
+  <br />
+  · 🏗 Proyek UAS Mata Kuliah Platform  
+  · ⚽ Tiket & Tim  
+  · 📱 Midtrans Snap Payment
+</div>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Tentang Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+_Ticketing Football UAS_ adalah aplikasi berbasis web yang memudahkan pengguna untuk memesan tiket pertandingan sepak bola secara online. Dibangun menggunakan Laravel dan terintegrasi dengan Midtrans sebagai solusi pembayaran.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Fitur utama:
 
-## Learning Laravel
+-   Registrasi dan login pengguna
+-   Pemesanan tiket pertandingan
+-   Pembayaran online via Midtrans (Snap)
+-   Berita dan highlights pertandingan
+-   Daftar tim peserta
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ⚙ Dibangun Dengan
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Teknologi                                    | Keterangan                   |
+| -------------------------------------------- | ---------------------------- |
+| [Laravel](https://laravel.com/)              | Backend Framework PHP        |
+| [Midtrans](https://midtrans.com)             | Payment Gateway              |
+| [Blade](https://laravel.com/docs/10.x/blade) | Templating engine            |
+| [Bootstrap](https://getbootstrap.com/)       | UI Styling (opsional)        |
+| MySQL                                        | Basis data lokal (via XAMPP) |
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Memulai
 
-### Premium Partners
+### 📋 Prasyarat
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Pastikan Anda sudah menginstal:
 
-## Contributing
+-   PHP >= 8.1
+-   Composer
+-   Node.js & npm
+-   MySQL (melalui XAMPP atau sejenis)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 💾 Instalasi
 
-## Code of Conduct
+1. _Clone repo_
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+bash
+git clone https://github.com/username/ticketing_football_uas.git
+cd ticketing_football_uas
 
-## Security Vulnerabilities
+2. _Install dependency_
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+bash
+composer install
+npm install
 
-## License
+3. _Copy file .env & generate key_
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+bash
+copy .env.example .env
+php artisan key:generate
+
+4. _Setup database_
+
+-   Jalankan XAMPP → Aktifkan MySQL
+-   Buat database baru, contoh: ticketing_football
+-   Edit file .env:
+
+env
+DB_DATABASE=ticketing_football
+DB_USERNAME=root
+DB_PASSWORD=
+
+5. _Setup Midtrans_
+
+-   Daftar akun di [Midtrans Sandbox](https://dashboard.sandbox.midtrans.com/)
+-   Ambil _CLIENT_KEY_ dan _SERVER_KEY_
+-   Tambahkan ke .env:
+
+env
+MIDTRANS_CLIENT_KEY=your_client_key
+MIDTRANS_SERVER_KEY=your_server_key
+MIDTRANS_IS_PRODUCTION=false
+
+6. _Migrasi database_
+
+bash
+php artisan migrate
+
+7. _Jalankan server_
+
+bash
+php artisan serve
+
+---
+
+## 🧑‍💻 Penggunaan
+
+Setelah server berjalan:
+
+-   Daftar dan login sebagai pengguna
+-   Pilih pertandingan dan pesan tiket
+-   Lanjutkan ke checkout dan lakukan pembayaran via Midtrans Snap popup
+
+---
+
+## 📁 Struktur Proyek
+
+```bash
+📦 root/
+├── 📁 app/
+│   ├── 📁 Http/
+│   │   ├── 📁 Controllers/
+│   │   │   ├── 📁 Auth/
+│   │   │   │   └── AreasController.php
+│   │   │   ├── Controller.php
+│   │   │   ├── MatchesController.php
+│   │   │   ├── OrderController.php
+│   │   │   ├── ProfileController.php
+│   │   │   ├── SeatsController.php
+│   │   │   ├── TeamsController.php
+│   │   │   ├── TicketController.php
+│   │   │   └── UsersController.php
+│   │   ├── 📁 Middleware/
+│   │   └── 📁 Requests/
+│   ├── 📁 Models/
+│   ├── 📁 Providers/
+│   └── 📁 View/
+│
+├── 📁 bootstrap/
+│   └── 📁 cache/
+│       ├── app.php
+│       └── providers.php
+│
+├── 📁 config/
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── midtrans.php
+│   ├── queue.php
+│   ├── sanctum.php
+│   ├── services.php
+│   └── session.php
+│
+├── 📁 database/
+│   ├── 📁 factories/
+│   ├── 📁 migrations/
+│   └── 📁 seeders/
+│
+├── 📁 public/
+│
+├── 📁 resources/
+│   ├── 📁 css/
+│   ├── 📁 js/
+│   └── 📁 views/
+│       ├── 📁 auth/
+│       ├── 📁 components/
+│       ├── 📁 layouts/
+│       ├── 📁 order/
+│       ├── 📁 profile/
+│       └── 📁 tickets/
+│           ├── dashboard.blade.php
+│           ├── schedule.blade.php
+│           └── welcome.blade.php
+│
+├── 📁 routes/
+│   ├── api.php
+│   ├── auth.php
+│   ├── console.php
+│   └── web.php
+│
+├── 📁 storage/
+├── 📁 tests/
+├── 📁 vendor/
+│
+│
+│
+├── composer.json
+├── package.json
+```
+
+## 💳 Testing Pembayaran
+
+1. Lakukan pemesanan seperti biasa
+2. Di halaman checkout, Midtrans Snap akan muncul sebagai popup
+3. Ikuti alur pembayaran via sandbox (gunakan kartu demo)
+
+> Pastikan internet aktif agar Midtrans Snap dapat muncul dengan sempurna
+
+---
+
+## 🚨 Catatan Produksi
+
+-   Ubah .env menjadi:
+
+env
+MIDTRANS_IS_PRODUCTION=true
+
+-   Gunakan _Client Key_ dan _Server Key_ dari dashboard _Midtrans Production_
+
+---
+
+## 👥 Kontributor
+
+-   Dennis /235314119
+-   Mosses /235314092
+-   Alogo /235314089
+-   Calvin /235314116
+-   Eto /235314118
