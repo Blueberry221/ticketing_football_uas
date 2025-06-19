@@ -10,7 +10,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $table = 'user';
-
+    const ROLE_USER = 'user';
     protected $fillable = [
         'name',
         'email',

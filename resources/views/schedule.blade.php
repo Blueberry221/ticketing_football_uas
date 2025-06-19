@@ -28,19 +28,6 @@
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
-    <!-- Navbar -->
-    <nav class="navbar py-4 px-6 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{{ route('home') }}" class="text-2xl font-bold text-yellow-400">Tiketing Football</a>
-            <div class="space-x-4">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }} px-3 py-2">Home</a>
-                <a href="{{ route('schedule') }}" class="{{ request()->routeIs('schedule') ? 'active' : '' }} px-3 py-2">Schedule</a>
-                <a href="{{ route('schedule') }}" class="{{ request()->routeIs('schedule') ? 'active' : '' }} px-3 py-2">Tickets</a>
-                <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.edit') ? 'active' : '' }} px-3 py-2">Profile</a>
-            </div>
-        </div>
-    </nav>
-
     <!-- Schedule Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Jadwal Pertandingan</h2>
@@ -71,7 +58,6 @@
                 <a href="{{ route('schedule') }}" class="text-yellow-400 hover:underline">Schedule</a>
                 <a href="{{ route('schedule') }}" class="text-yellow-400 hover:underline">Tickets</a>
             </div>
-            <p class="mt-4 text-sm">&copy; 2025 Tiketing Football. All rights reserved.</p>
         </div>
     </footer>
 </body>
