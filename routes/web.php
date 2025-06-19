@@ -34,6 +34,17 @@ Route::middleware('auth')->group(function () {
     })->name('schedule');
 
 
+    // Matches routes
+    Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
+    Route::get('/matches/{match}', [MatchesController::class, 'show'])->name('matches.show');
+
+    // Tickets routes
+    Route::get('/my-tickets', [TicketController::class, 'index'])->name('my-tickets');
+    Route::get('/tickets/{match}/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/{ticket}/download', [TicketController::class, 'download'])->name('tickets.download');
+    Route::get('/tickets/{ticket}/download-pdf', [TicketController::class, 'downloadPdf'])->name('tickets.download-pdf');
+
     Route::get('/tickets', function () {
         $matches = Matches::with(['homeTeam', 'awayTeam'])->get();
         $seats = Seats::with(['area'])->get();

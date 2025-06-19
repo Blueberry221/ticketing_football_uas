@@ -1,115 +1,63 @@
 <x-app-layout>
-    <!DOCTYPE html>
-    <html lang="en">
+    <div class="py-12 mt-16 p-4">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <h2 class="text-2xl font-semibold mb-6">My Tickets</h2>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pembelian Tiket</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            .navbar {
-                background-color: #1a2b4a;
-            }
-
-            .navbar a {
-                color: #d4a017;
-            }
-
-            .navbar a:hover,
-            .navbar a.active {
-                color: #fff;
-                background-color: #d4a017;
-                border-radius: 0.25rem;
-            }
-
-            .form-select,
-            .form-button {
-                transition: all 0.3s ease;
-            }
-
-            .form-button:hover {
-                background-color: #b88c14;
-            }
-        </style>
-    </head>
-
-    <body class="bg-gray-100 font-sans">
-        <!-- Navbar -->
-        <nav class="navbar py-4 px-6 shadow-md">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <a href="{{ route('home') }}" class="text-2xl font-bold text-yellow-400">Tiketing Football</a>
-
+                    @if($tickets->isEmpty())
+                        <p class="text-gray-600">You haven't purchased any tickets yet.</p>
+                    @else
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach($tickets as $ticket)
+                                <div class="border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-lg transition">
+                                    <div class="bg-green-600 text-white px-4 py-2">
+                                        <h3 class="text-lg font-semibold">{{ $ticket->match->home_team }} vs {{ $ticket->match->away_team }}</h3>
+                                        <p class="text-sm opacity-90 capitalize">{{ $ticket->ticketType->type ?? 'Standard' }}</p>
+                                    </div>
+                                    <div class="p-4">
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600">Date & Time</p>
+                                            <p class="font-medium">{{ $ticket->match->match_date->format('F j, Y g:i A') }}</p>
+                                        </div>
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600">Stadium</p>
+                                            <p class="font-medium">{{ $ticket->match->stadium }}</p>
+                                        </div>
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600">Ticket Number</p>
+                                            <p class="font-medium">{{ $ticket->ticket_number }}</p>
+                                        </div>
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600">Status</p>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                {{ $ticket->status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                {{ ucfirst($ticket->status) }}
+                                            </span>
+                                        </div>
+                                        <div class="flex justify-center space-x-4">
+                                            <a href="{{ route('tickets.download', $ticket) }}" 
+                                               class="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                                E-Ticket
+                                            </a>
+                                            <a href="{{ route('tickets.download-pdf', $ticket) }}" 
+                                               class="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                                </svg>
+                                                PDF
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
-        </nav>
-
-        <!-- Ticket Purchase Section -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            @if ($matches->isNotEmpty())
-            @foreach ($matches as $match)
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Pembelian Tiket: {{ $match->homeTeam->name }} vs
-                {{ $match->awayTeam->name }}</h2>
-            <p class="text-gray-600 mb-2">Tanggal: {{ $match->match_date->format('d M Y, H:i') }}</p>
-            <p class="text-gray-600 mb-6">Stadion: {{ $match->stadium }}</p>
-            @endforeach
-        @endif
-
-            @if (session('success'))
-                <div class="bg-green-100 text-green-900 p-4 rounded-md mb-6">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-                <div class="bg-red-100 text-red-900 p-4 rounded-md mb-6">{{ session('error') }}</div>
-            @endif
-            @if (session('info'))
-                <div class="bg-blue-100 text-blue-900 p-4 rounded-md mb-6">{{ session('info') }}</div>
-            @endif
-
-            <form action="{{ route('tickets.purchase') }}" method="POST" class="bg-white p-6 rounded-lg shadow-md">
-                @csrf
-                <input type="hidden" name="match_id" value="{{ $match->id }}">
-                <div class="mb-4">
-                    <label for="seat_id" class="block text-gray-700 font-semibold mb-2">Pilih Kursi</label>
-                    <select name="seat_id" id="seat_id"
-                        class="form-select w-full p-2 border border-gray-300 rounded-md" required>
-                        <option value="">Pilih kursi</option>
-                        @foreach ($seats as $seat)
-                            <option value="{{ $seat->id }}">{{ $seat->area->name }} - {{ $seat->number }} (Rp
-                                {{ number_format($seat->area->price, 0, ',', '.') }})</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="payment_method" class="block text-gray-700 font-semibold mb-2">Metode Pembayaran</label>
-                    <select name="payment_method" id="payment_method"
-                        class="form-select w-full p-2 border border-gray-300 rounded-md" required>
-                        <option value="">Pilih metode pembayaran</option>
-                        @foreach ($payment_methods as $method)
-                            <option value="{{ $method }}">{{ $method }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit"
-                    class="form-button bg-yellow-400 text-gray-900 px-6 py-2 rounded-md font-semibold hover:bg-yellow-500">Pesan
-                    Tiket</button>
-            </form>
-
-            <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Informasi Harga</h3>
-            <ul class="list-disc pl-6 text-gray-600">
-                <li>Utara/Selatan: Rp 100,000</li>
-                <li>Timur/Barat: Rp 250,000</li>
-            </ul>
-
-            <a href="{{ route('schedule') }}"
-                class="inline-block mt-6 bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">Kembali ke
-                Jadwal</a>
         </div>
-
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-        </footer>
-    </body>
-
-    </html>
+    </div>
 </x-app-layout>

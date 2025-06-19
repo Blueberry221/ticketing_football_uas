@@ -10,8 +10,8 @@ class Areas extends Model
     use HasFactory;
 
     protected $fillable = [
-        'placement', 
-        'status', 
+        'placement',
+        'status',
         'price'
     ];
 
