@@ -48,7 +48,7 @@
             .arrow:hover {
                 color: #facc15;
             }
-
+            
             .no-scrollbar::-webkit-scrollbar {
                 display: none;
             }
@@ -79,6 +79,7 @@
                 <h2 class="text-3xl font-bold text-yellow-400 mb-6">HIGHLIGHT</h2>
                 <div class="flex items-center space-x-4">
                     <!-- Tombol kiri -->
+
                     <button id="prevBtn"
                         class="arrow text-4xl text-yellow-400 cursor-pointer select-none">&lt;</button>
 
