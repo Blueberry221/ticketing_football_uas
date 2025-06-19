@@ -18,6 +18,8 @@ class MatchesTableSeeder extends Seeder
         $jakarta = Teams::where('name', 'Kumpulan Pria Menawan FC')->first();
         $sleman = Teams::where('name', 'Paingan FC')->first();
         $surabaya = Teams::where('name', 'Sore FC')->first();
+        $yogyakarta = Teams::where('name', 'Gajah Mada FC')->first();
+        $medan = Teams::where('name', 'Harimau Sumatera FC')->first();
 
         // Pertandingan 1
         Matches::create([
@@ -40,6 +42,30 @@ class MatchesTableSeeder extends Seeder
             'home_team_id' => $sleman->id,
             'away_team_id' => $surabaya->id,
             'match_date'   => '2025-06-20 20:00:00',
+            'status'       => 'upcoming',
+        ]);
+        
+        // Pertandingan 4
+        Matches::create([
+            'home_team_id' => $yogyakarta->id,
+            'away_team_id' => $surabaya->id,
+            'match_date'   => '2025-06-22 18:00:00',
+            'status'       => 'upcoming',
+        ]);
+
+        // Pertandingan 5
+        Matches::create([
+            'home_team_id' => $medan->id,
+            'away_team_id' => $jakarta->id,
+            'match_date'   => '2025-06-25 19:00:00',
+            'status'       => 'upcoming',
+        ]);
+
+        // Pertandingan 6
+        Matches::create([
+            'home_team_id' => $sleman->id,
+            'away_team_id' => $medan->id,
+            'match_date'   => '2025-06-25 19:00:00',
             'status'       => 'upcoming',
         ]);
     }

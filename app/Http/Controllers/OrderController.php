@@ -12,6 +12,8 @@ use Midtrans\Snap;
 use Midtrans\Config;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -21,7 +23,6 @@ class OrderController extends Controller
         $seats = Seats::with('area')->where('status', 'available')->get(); // hanya seat tersedia
         return view('order.index', compact('matches', 'seats'));
     }
-
     public function order(Request $request)
     {
         $request->validate([
@@ -29,65 +30,139 @@ class OrderController extends Controller
             'seat_id' => 'required|exists:seats,id',
         ]);
 
-        $seat = Seats::with('area')->findOrFail($request->seat_id);
-        if ($seat->status !== 'available') {
-            return redirect()->back()->with('error', 'Seat sudah dipesan.');
-        }
+        DB::beginTransaction(); 
+        try {
+            $seat = Seats::with('area')->lockForUpdate()->findOrFail($request->seat_id);
+            if ($seat->status !== 'available') {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Seat sudah dipesan.');
+            }
 
-        $user = Auth::user() ?? User::where('role', 'user')->first();
+            $user = Auth::user() ?? User::where('role', 'user')->first();
+            $orderNumber = 'ORDER-' . Str::uuid();
 
-        // Generate order_number (order_id untuk midtrans)
-        $orderNumber = 'ORDER-' . Str::uuid();
+            $order = Order::create([
+                'user_id' => $user->id,
+                'order_number' => $orderNumber,
+                'total_price' => $seat->area->price,
+                'status' => 'pending',
+                'payment_method' => 'midtrans',
+            ]);
 
-        // 1. Buat Order
-        $order = Order::create([
-            'user_id' => $user->id,
-            'order_number' => $orderNumber, // <--- Tambah ini
-            'total_price' => $seat->area->price,
-            'status' => 'pending',
-            'payment_method' => 'midtrans',
-        ]);
+            $ticket = Tickets::create([
+                'order_id' => $order->id,
+                'match_id' => $request->match_id,
+                'seat_id' => $seat->id,
+                'status' => 'pending',
+                'user_id' => $user->id,
+                'booked_at' => now(),
+                'payment_method' => 'midtrans',
+            ]);
 
-        // 2. Buat Tiket
-        $ticket = Tickets::create([
-            'order_id' => $order->id,
-            'match_id' => $request->match_id,
-            'seat_id' => $seat->id,
-            'status' => 'pending',
-            'user_id' => $user->id,
-            'booked_at' => now(),
-            'payment_method' => 'midtrans',
-        ]);
+            $seat->update(['status' => 'booked']);
 
-        // Midtrans config
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = false;
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
+            DB::commit();
 
-        $params = [
-            'transaction_details' => [
-                'order_id' => $orderNumber,
-                'gross_amount' => $seat->area->price,
-            ],
-            'customer_details' => [
-                'first_name' => $user->name,
-                'email' => $user->email,
-            ],
-            'item_details' => [
-                [
-                    'id' => $ticket->id,
-                    'price' => $seat->area->price,
-                    'quantity' => 1,
-                    'name' => 'Tiket pertandingan #' . $request->match_id,
+            // Midtrans config
+            Config::$serverKey = config('midtrans.server_key');
+            Config::$isProduction = false;
+            Config::$isSanitized = true;
+            Config::$is3ds = true;
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $orderNumber,
+                    'gross_amount' => $seat->area->price,
                 ],
-            ],
-        ];
+                'customer_details' => [
+                    'first_name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'item_details' => [
+                    [
+                        'id' => $ticket->id,
+                        'price' => $seat->area->price,
+                        'quantity' => 1,
+                        'name' => 'Tiket pertandingan #' . $request->match_id,
+                    ],
+                ],
+            ];
 
-        $snapToken = Snap::getSnapToken($params);
+            $snapToken = Snap::getSnapToken($params);
 
-        return view('order.checkout', compact('snapToken', 'ticket'));
+            return view('order.checkout', compact('snapToken', 'ticket'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // \Log::error('Order creation failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memesan tiket.');
+        }
     }
+    // public function order(Request $request)
+    // {
+    //     $request->validate([
+    //         'match_id' => 'required|exists:matches,id',
+    //         'seat_id' => 'required|exists:seats,id',
+    //     ]);
+
+    //     $seat = Seats::with('area')->findOrFail($request->seat_id);
+    //     if ($seat->status !== 'available') {
+    //         return redirect()->back()->with('error', 'Seat sudah dipesan.');
+    //     }
+
+    //     $user = Auth::user() ?? User::where('role', 'user')->first();
+
+    //     // Generate order_number (order_id untuk midtrans)
+    //     $orderNumber = 'ORDER-' . Str::uuid();
+
+    //     // 1. Buat Order
+    //     $order = Order::create([
+    //         'user_id' => $user->id,
+    //         'order_number' => $orderNumber, // <--- Tambah ini
+    //         'total_price' => $seat->area->price,
+    //         'status' => 'pending',
+    //         'payment_method' => 'midtrans',
+    //     ]);
+
+    //     // 2. Buat Tiket
+    //     $ticket = Tickets::create([
+    //         'order_id' => $order->id,
+    //         'match_id' => $request->match_id,
+    //         'seat_id' => $seat->id,
+    //         'status' => 'pending',
+    //         'user_id' => $user->id,
+    //         'booked_at' => now(),
+    //         'payment_method' => 'midtrans',
+    //     ]);
+
+    //     // Midtrans config
+    //     Config::$serverKey = config('midtrans.server_key');
+    //     Config::$isProduction = false;
+    //     Config::$isSanitized = true;
+    //     Config::$is3ds = true;
+
+    //     $params = [
+    //         'transaction_details' => [
+    //             'order_id' => $orderNumber,
+    //             'gross_amount' => $seat->area->price,
+    //         ],
+    //         'customer_details' => [
+    //             'first_name' => $user->name,
+    //             'email' => $user->email,
+    //         ],
+    //         'item_details' => [
+    //             [
+    //                 'id' => $ticket->id,
+    //                 'price' => $seat->area->price,
+    //                 'quantity' => 1,
+    //                 'name' => 'Tiket pertandingan #' . $request->match_id,
+    //             ],
+    //         ],
+    //     ];
+
+    //     $snapToken = Snap::getSnapToken($params);
+
+    //     return view('order.checkout', compact('snapToken', 'ticket'));
+    // }
 
     //Note : Untuk yg ngerjain view order/transaksi nanti, untuk bagian callback seharusnya udah bisa, kalau udah ditest pembayaran make midtrans tolong dicek db-nya ya
     //Frathol Pro palhem
@@ -138,4 +213,62 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'Invalid signature'], 403);
     }
+
+    // public function manualConfirm(Order $order)
+    // {
+    //     if ($order->status === 'paid') {
+    //         return back()->with('info', 'Pembayaran sudah dikonfirmasi sebelumnya.');
+    //     }
+
+    //     // Update status order dan tiket
+    //     $order->update(['status' => 'paid']);
+
+    //     $tickets = Tickets::where('order_id', $order->id)->get();
+
+    //     foreach ($tickets as $ticket) {
+    //         $ticket->update(['status' => 'paid']);
+    //         if ($ticket->seat) {
+    //             $ticket->seat->update(['status' => 'booked']);
+    //         }
+    //     }
+
+    //     return back()->with('info', 'Pembayaran berhasil dikonfirmasi secara manual.');
+    // }
+
+    public function manualConfirm(Order $order)
+{
+    Log::info('Manual Confirm Started', [
+        'order_id' => $order->id,
+        'current_status' => $order->status,
+    ]);
+
+    if ($order->status === 'paid') {
+        Log::info('Order already paid, skipping update', ['order_id' => $order->id]);
+        return back()->with('info', 'Pembayaran sudah dikonfirmasi sebelumnya.');
+    }
+
+    Log::info('Updating order status to paid', ['order_id' => $order->id]);
+    $orderUpdated = $order->update(['status' => 'paid']);
+
+    $tickets = Tickets::where('order_id', $order->id)->get();
+    Log::info('Found tickets', ['order_id' => $order->id, 'ticket_count' => $tickets->count()]);
+
+    foreach ($tickets as $ticket) {
+        Log::info('Updating ticket', [
+            'ticket_id' => $ticket->id,
+            'seat_id' => $ticket->seat_id,
+            'current_status' => $ticket->status,
+        ]);
+
+        $ticketUpdated = $ticket->update(['status' => 'paid']);
+        if ($ticket->seat) {
+            $ticket->seat->update(['status' => 'booked']);
+        } else {
+            Log::error('Seat not found for ticket', ['ticket_id' => $ticket->id]);
+        }
+    }
+
+    Log::info('Manual Confirm Completed', ['order_id' => $order->id]);
+    return back()->with('info', 'Pembayaran berhasil dikonfirmasi secara manual.');
+}
 }

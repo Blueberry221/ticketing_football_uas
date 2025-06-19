@@ -30,5 +30,17 @@ class TeamsTableSeeder extends Seeder
             'logo' => 'Sore_FC.png',
             'city' => 'Surabaya',
         ]);
+        
+        Teams::create([
+            'name' => 'Gajah Mada FC',
+            'logo' => 'Gajah_Mada_FC.png',
+            'city' => 'Yogyakarta',
+        ]);
+
+        Teams::create([
+            'name' => 'Harimau Sumatera FC',
+            'logo' => 'Harimau_Sumatera_FC.png',
+            'city' => 'Medan',
+        ]);
     }
 }
