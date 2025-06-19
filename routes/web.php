@@ -10,7 +10,7 @@ use App\Models\Seats;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 })->name('home');
 
 Route::middleware('auth')->group(function () {
@@ -33,6 +33,12 @@ Route::middleware('auth')->group(function () {
         return view('schedule', compact('matches'));
     })->name('schedule');
 
+    // Route::group(['middleware' => 'auth'], function () {
+    //     Route::get('/order', [OrderController::class, 'index'])->name('order');
+    //     Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
+    // });
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 
     // Matches routes
     Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
