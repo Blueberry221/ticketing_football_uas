@@ -506,6 +506,25 @@
             Powered by <strong>Midtrans Payment Gateway</strong><br>
             Transaksi Anda dilindungi dengan enkripsi tingkat perbankan
         </div>
+        @if ($ticket->order && $ticket->order->status === 'pending')
+    <form action="{{ route('manual.confirm', $ticket->order->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin sudah membayar?');" style="margin-top: 20px;">
+        @csrf
+        <button type="submit" style="
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            ✅ Saya Sudah Membayar
+        </button>
+    </form>
+@endif
+
     </div>
 
     <script type="text/javascript">

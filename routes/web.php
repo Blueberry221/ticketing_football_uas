@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     // Matches routes
     Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
     Route::get('/matches/{match}', [MatchesController::class, 'show'])->name('matches.show');
+    Route::post('/manual-payment-confirmation/{order}', [OrderController::class, 'manualConfirm'])->name('manual.confirm');
 
     // Tickets routes
     Route::get('/my-tickets', [TicketController::class, 'index'])->name('my-tickets');

@@ -137,5 +137,27 @@ class OrderController extends Controller
         }
 
         return response()->json(['message' => 'Invalid signature'], 403);
+    }    
+    
+    public function manualConfirm(Order $order)
+    {
+        // dd($order, $order->status);
+        if ($order->status === 'paid') {
+            return back()->with('info', 'Pembayaran sudah dikonfirmasi sebelumnya.');
+        }
+
+        // Update status order dan tiket
+        $order->update(['status' => 'paid']);
+
+        $tickets = Tickets::where('order_id', $order->id)->get();
+
+        foreach ($tickets as $ticket) {
+            $ticket->update(['status' => 'paid']);
+            if ($ticket->seat) {
+                $ticket->seat->update(['status' => 'booked']);
+            }
+        }
+
+        return back()->with('info', 'Pembayaran berhasil dikonfirmasi secara manual.');
     }
 }
