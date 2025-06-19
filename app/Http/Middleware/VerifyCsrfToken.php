@@ -2,13 +2,23 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class VerifyCsrfToken extends Middleware
+class VerifyCsrfToken
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        return $next($request);
+    }
+
     protected $except = [
-        // '/midtrans-callback' untuk disable CSRF, harusnya bisa kalau routenya web.php
-        //DIUnkomen aja kalau misal pas selesai pembelian malah ga berubah status pembeliannya
-        '/midtrans-callback',
+        '/midtrans-callback'
     ];
 }

@@ -7,7 +7,7 @@ use App\Models\Matches;
 use App\Models\Seats;
 use App\Models\Tickets;
 use App\Models\Order;
-use App\Models\Users;
+use App\Models\User;
 use Midtrans\Snap;
 use Midtrans\Config;
 use Illuminate\Support\Str;
@@ -34,7 +34,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Seat sudah dipesan.');
         }
 
-        $user = Auth::user() ?? Users::where('role', 'user')->first();
+        $user = Auth::user() ?? User::where('role', 'user')->first();
 
         // Generate order_number (order_id untuk midtrans)
         $orderNumber = 'ORDER-' . Str::uuid();

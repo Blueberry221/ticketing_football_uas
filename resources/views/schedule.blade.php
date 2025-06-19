@@ -51,9 +51,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($matches as $match)
                     <div class="card bg-white rounded-lg p-6 shadow-md">
-                        <h3 class="text-xl font-semibold mb-2">{{ $match->home_team->name }} vs {{ $match->away_team->name }}</h3>
+                        <h3 class="text-xl font-semibold mb-2">{{ $match->homeTeam->name }} vs {{ $match->awayTeam->name }}</h3>
                         <p class="text-gray-600 mb-1">Tanggal: {{ $match->match_date->format('d M Y, H:i') }}</p>
-                        <p class="text-gray-600 mb-4">Stadion: {{ $match->stadium }}</p>
+                        <p class="text-gray-600 mb-4">Stadion: Maguwoharjo</p>
                         <a href="{{ route('tickets', $match->id) }}" class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-yellow-500 transition">Beli Tiket</a>
                     </div>
                 @endforeach

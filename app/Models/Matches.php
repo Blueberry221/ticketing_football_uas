@@ -16,6 +16,11 @@ class Matches extends Model
         'status'
     ];
 
+
+    protected $casts = [
+        'match_date' => 'datetime',
+    ];
+
     public function homeTeam()
     {
         return $this->belongsTo(Teams::class, 'home_team_id');

@@ -45,10 +45,14 @@
 
         <!-- Ticket Purchase Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Pembelian Tiket: {{ $Matches->home_team_id->name }} vs
-                {{ $Matches->away_team_id->name }}</h2>
-            <p class="text-gray-600 mb-2">Tanggal: {{ $Matches->match_date->format('d M Y, H:i') }}</p>
-            <p class="text-gray-600 mb-6">Stadion: {{ $Matches->stadium }}</p>
+            @if ($matches->isNotEmpty())
+            @foreach ($matches as $match)
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Pembelian Tiket: {{ $match->homeTeam->name }} vs
+                {{ $match->awayTeam->name }}</h2>
+            <p class="text-gray-600 mb-2">Tanggal: {{ $match->match_date->format('d M Y, H:i') }}</p>
+            <p class="text-gray-600 mb-6">Stadion: {{ $match->stadium }}</p>
+            @endforeach
+        @endif
 
             @if (session('success'))
                 <div class="bg-green-100 text-green-900 p-4 rounded-md mb-6">{{ session('success') }}</div>
@@ -62,7 +66,7 @@
 
             <form action="{{ route('tickets.purchase') }}" method="POST" class="bg-white p-6 rounded-lg shadow-md">
                 @csrf
-                <input type="hidden" name="match_id" value="{{ $Matches->id }}">
+                <input type="hidden" name="match_id" value="{{ $match->id }}">
                 <div class="mb-4">
                     <label for="seat_id" class="block text-gray-700 font-semibold mb-2">Pilih Kursi</label>
                     <select name="seat_id" id="seat_id"
