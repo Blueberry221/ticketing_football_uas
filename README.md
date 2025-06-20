@@ -3,7 +3,7 @@
 <div align="center">
   Aplikasi pemesanan tiket pertandingan sepak bola berbasis Laravel, lengkap dengan integrasi payment gateway Midtrans.  
   <br />
-  <a href="https://github.com/username/ticketing_football_uas"><strong>Explore the Docs »</strong></a>
+  <a href="https://github.com/Blueberry221/ticketing_football_uas"><strong>Explore the Docs »</strong></a>
   <br />
   <br />
   · 🏗 Proyek UAS Mata Kuliah Platform  
