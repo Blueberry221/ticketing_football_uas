@@ -49,12 +49,12 @@
             <div class="mb-4">
                 <input type="password" name="password" class="input-field" placeholder="Enter your password" required>
             </div>
-            <div class="mb-4 flex justify-between items-center max-w-xs mx-auto">
+            {{-- <div class="mb-4 flex justify-between items-center max-w-xs mx-auto">
                 <label>
                     <input type="checkbox" name="remember" class="mr-2"> Remember Me
                 </label>
                 <a href="{{ route('password.request') }}">Forgot Password?</a>
-            </div>
+            </div> --}}
             <button type="submit" class="btn-login">Login</button>
         </form>
         <p class="mt-4">Not registered yet? Create an account <a href="{{ route('register') }}">Sign Up</a></p>
